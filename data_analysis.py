@@ -1,7 +1,10 @@
+import matplotlib
 import pandas as pd
 import numpy as p
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+matplotlib.use('TkAgg')
 
 # Read dataset csv
 df = pd.read_csv('dataset.csv')
@@ -23,7 +26,7 @@ print("Unique cryptocurrencies in filtered_df: ", filtered_df['crypto_name'].uni
 print("\n")
 
 # Calculate daily returns for each crypto
-filtered_df['daily_return'] = filtered_df.groupby('crypto_name')['close'].pct_change()*100
+filtered_df['daily_return'] = filtered_df.groupby('crypto_name')['close'].pct_change() * 100
 
 # Calculate rolling averages of closing prices
 filtered_df['moving_avg_20'] = filtered_df.groupby('crypto_name')['close'].transform(lambda x: x.rolling(20).mean())
@@ -36,3 +39,22 @@ print("filtered_df after adding daily returns, moving_avg_20, moving_avg_50 and 
 print(filtered_df.head())
 print("\n")
 
+# Exploratory Data analysis
+print("-----Exploratory Data Analysis-----")
+
+# Filter dates and order them chronologically
+filtered_df['date'] = pd.to_datetime(filtered_df['date'], format='%Y-%m-%d', errors='coerce')
+filtered_df = filtered_df.sort_values('date').reset_index(drop=True)
+
+# Plot closing price trends
+for crypto in filtered_df['crypto_name'].unique():
+    subset = filtered_df[filtered_df['crypto_name'] == crypto]
+    plt.figure(figsize=(12, 6))
+    plt.plot(subset['date'], subset['close'], label=crypto)
+    plt.title(f'{crypto} Closing Prices Over Time (2013–2023)')
+    plt.xlabel('Date')
+    plt.ylabel('Closing Price')
+    plt.legend()
+    plt.savefig(f"{crypto}_closing_prices_2013_2023.png")
+    plt.show(block=False)
+plt.show()
