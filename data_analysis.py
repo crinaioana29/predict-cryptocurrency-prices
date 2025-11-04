@@ -58,3 +58,24 @@ for crypto in filtered_df['crypto_name'].unique():
     plt.savefig(f"{crypto}_closing_prices_2013_2023.png")
     plt.show(block=False)
 plt.show()
+
+# Histograms of closing prices for both cryptocurrencies
+for crypto in filtered_df['crypto_name'].unique():
+    plt.figure(figsize=(12, 6))
+    sns.histplot(filtered_df[filtered_df['crypto_name'] == crypto]['close'], bins=80, kde=True)
+    plt.title(f"Histogram of Closing Prices for {crypto}")
+    plt.xlabel('Closing Price')
+    plt.ylabel('Count')
+    plt.savefig(f"{crypto}_closing_prices_histogram.png")
+plt.show()
+
+# Histograms of daily returns for both cryptocurrencies
+for crypto in filtered_df['crypto_name'].unique():
+    plt.figure(figsize=(12, 6))
+    sns.histplot(filtered_df[filtered_df['crypto_name'] == crypto]['daily_return'] , bins=80, kde=True)
+    plt.title(f"Histogram of Closing Prices for {crypto}")
+    plt.xlabel('Daily Return (%)')
+    plt.ylabel('Count')
+    plt.savefig(f"{crypto}_daily_returns_histogram.png")
+plt.show()
+
